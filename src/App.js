@@ -1,5 +1,5 @@
 import DatePicker from "react-datepicker";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Line } from "react-chartjs-2";
 
 const options = {
@@ -31,6 +31,10 @@ function App() {
   const [startDate, setStartDate] = useState(getDateOfTenDaysBefore());
   const [endDate, setEndDate] = useState(new Date());
   const [graphData, setGraphData] = useState({});
+
+  const graph = useMemo(() => <Line data={graphData} options={options} />, [
+    graphData,
+  ]);
 
   const fetchData = async () => {
     const resp = await fetch(
@@ -74,9 +78,7 @@ function App() {
           Render
         </button>
       </div>
-      <div className="graph">
-        <Line data={graphData} options={options} />
-      </div>
+      <div className="graph">{graph}</div>
     </div>
   );
 }
