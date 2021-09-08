@@ -36,10 +36,15 @@ function App() {
       <div className="form">
         <DatePicker
           selected={startDate}
+          dateFormat="yyyy-mm-dd"
           onChange={(date) => setStartDate(date)}
         />
-        <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} />
-        <button>Render</button>
+        <DatePicker
+          selected={endDate}
+          dateFormat="yyyy-mm-dd"
+          onChange={(date) => setEndDate(date)}
+        />
+        <button className="btn">Render</button>
       </div>
       <div className="graph">
         <Line data={data} options={options} />
