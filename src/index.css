@@ -25,5 +25,6 @@ code {
 
 .btn {
   width: 300px;
+  cursor: pointer;
 }
 

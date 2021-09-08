@@ -1,5 +1,5 @@
 import DatePicker from "react-datepicker";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 
 const data = {
@@ -29,13 +29,33 @@ const options = {
 
 const getDateOfTenDaysBefore = () => {
   const d = new Date();
-  d.setDate(d.getDate() - 10)
-  return new Date(d)
-}
+  d.setDate(d.getDate() - 10);
+  return new Date(d);
+};
+
+const formatDate = (date) => {
+  const offset = date.getTimezoneOffset();
+  date = new Date(date.getTime() - offset * 60 * 1000);
+  return date.toISOString().split("T")[0];
+};
 
 function App() {
   const [startDate, setStartDate] = useState(getDateOfTenDaysBefore());
   const [endDate, setEndDate] = useState(new Date());
+
+  const fetchData = async () => {
+    const resp = await fetch(
+      `https://api.coindesk.com/v1/bpi/historical/close.json?start=${formatDate(
+        startDate
+      )}&end=${formatDate(endDate)}&index=[USD]`
+    );
+    const data = await resp.json();
+    console.log(data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <div className="container">
@@ -50,7 +70,9 @@ function App() {
           dateFormat="yyyy-mm-dd"
           onChange={(date) => setEndDate(date)}
         />
-        <button className="btn">Render</button>
+        <button className="btn" onClick={fetchData}>
+          Render
+        </button>
       </div>
       <div className="graph">
         <Line data={data} options={options} />
