@@ -27,8 +27,14 @@ const options = {
   },
 };
 
+const getDateOfTenDaysBefore = () => {
+  const d = new Date();
+  d.setDate(d.getDate() - 10)
+  return new Date(d)
+}
+
 function App() {
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(getDateOfTenDaysBefore());
   const [endDate, setEndDate] = useState(new Date());
 
   return (
