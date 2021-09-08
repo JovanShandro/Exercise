@@ -2,25 +2,13 @@ import DatePicker from "react-datepicker";
 import { useState, useEffect, useMemo } from "react";
 import { Line } from "react-chartjs-2";
 
-const options = {
-  plugins: {
-    legend: {
-      display: false,
-    },
-  },
-  elements: {
-    point: {
-      radius: 0,
-    },
-  },
-};
-
 const getDateOfTenDaysBefore = () => {
   const d = new Date();
   d.setDate(d.getDate() - 10);
   return new Date(d);
 };
 
+// Transform data in yyyy-mm-dd format
 const formatDate = (date) => {
   const offset = date.getTimezoneOffset();
   date = new Date(date.getTime() - offset * 60 * 1000);
@@ -32,10 +20,29 @@ function App() {
   const [endDate, setEndDate] = useState(new Date());
   const [graphData, setGraphData] = useState({});
 
-  const graph = useMemo(() => <Line data={graphData} options={options} />, [
-    graphData,
-  ]);
+  // Make sure graph gets updated only when data changes
+  const graph = useMemo(
+    () => (
+      <Line
+        data={graphData}
+        options={{
+          plugins: {
+            legend: {
+              display: false,
+            },
+          },
+          elements: {
+            point: {
+              radius: 0,
+            },
+          },
+        }}
+      />
+    ),
+    [graphData]
+  );
 
+  // Get bitcoin prices during the chosen time range and update graph
   const fetchData = async () => {
     const resp = await fetch(
       `https://api.coindesk.com/v1/bpi/historical/close.json?start=${formatDate(
