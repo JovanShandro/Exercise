@@ -8,6 +8,11 @@ const options = {
       display: false,
     },
   },
+  elements: {
+    point: {
+      radius: 0,
+    },
+  },
 };
 
 const getDateOfTenDaysBefore = () => {
